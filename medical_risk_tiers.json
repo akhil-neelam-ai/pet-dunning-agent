@@ -1,0 +1,57 @@
+{
+  "risk_tiers": {
+    "high": {
+      "conditions": [
+        "Diabetes (Insulin Dependent)",
+        "Chronic Kidney Disease",
+        "Heart Disease",
+        "Cancer (Active Treatment)",
+        "Epilepsy",
+        "Severe Allergies"
+      ],
+      "risk_score": 0.9,
+      "priority": "critical",
+      "recommended_action": "offer_bridge_plan"
+    },
+    "medium": {
+      "conditions": [
+        "Arthritis",
+        "Dental Disease",
+        "Obesity",
+        "Skin Conditions",
+        "Ear Infections (Chronic)"
+      ],
+      "risk_score": 0.6,
+      "priority": "moderate",
+      "recommended_action": "offer_payment_plan"
+    },
+    "low": {
+      "conditions": [
+        "Heartworm Prevention",
+        "Flea/Tick Prevention",
+        "Routine Vaccinations",
+        "General Wellness"
+      ],
+      "risk_score": 0.3,
+      "priority": "low",
+      "recommended_action": "standard_retry"
+    }
+  },
+  "ltv_thresholds": {
+    "high_value": {
+      "min_tenure_months": 12,
+      "min_ltv": 5000,
+      "recommended_action": "aggressive_retention"
+    },
+    "medium_value": {
+      "min_tenure_months": 6,
+      "min_ltv": 2000,
+      "recommended_action": "standard_retention"
+    },
+    "low_value": {
+      "min_tenure_months": 0,
+      "min_ltv": 0,
+      "recommended_action": "minimal_retention"
+    }
+  }
+}
