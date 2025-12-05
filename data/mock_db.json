@@ -1,0 +1,176 @@
+{
+  "users": {
+    "user_123": {
+      "name": "Maria Rodriguez",
+      "email": "maria.rodriguez@email.com",
+      "pet_name": "Bella",
+      "pet_species": "Dog",
+      "pet_breed": "Golden Retriever",
+      "pet_condition": "Diabetes (Insulin Dependent)",
+      "medical_risk_tier": "high",
+      "plan_cost": 50.0,
+      "tenure_months": 36,
+      "balance": 0.0,
+      "last_payment_status": "active",
+      "last_payment_date": "2025-11-05",
+      "ltv": 12000,
+      "current_plan": "bridge",
+      "payment_history": [
+        {
+          "date": "2025-10-05",
+          "status": "success",
+          "amount": 50.0
+        },
+        {
+          "date": "2025-09-05",
+          "status": "success",
+          "amount": 50.0
+        },
+        {
+          "date": "2025-08-05",
+          "status": "success",
+          "amount": 50.0
+        }
+      ]
+    },
+    "user_456": {
+      "name": "James Chen",
+      "email": "james.chen@email.com",
+      "pet_name": "Max",
+      "pet_species": "Dog",
+      "pet_breed": "Labrador",
+      "pet_condition": "Heartworm Prevention",
+      "medical_risk_tier": "low",
+      "plan_cost": 50.0,
+      "tenure_months": 8,
+      "balance": 0.0,
+      "last_payment_status": "failed",
+      "last_payment_date": "2025-11-05",
+      "ltv": 3200,
+      "current_plan": "premium",
+      "payment_history": [
+        {
+          "date": "2025-10-05",
+          "status": "success",
+          "amount": 50.0
+        },
+        {
+          "date": "2025-09-05",
+          "status": "failed",
+          "amount": 50.0
+        },
+        {
+          "date": "2025-08-05",
+          "status": "success",
+          "amount": 50.0
+        }
+      ]
+    },
+    "user_789": {
+      "name": "Sarah Johnson",
+      "email": "sarah.j@email.com",
+      "pet_name": "Whiskers",
+      "pet_species": "Cat",
+      "pet_breed": "Maine Coon",
+      "pet_condition": "Chronic Kidney Disease",
+      "medical_risk_tier": "high",
+      "plan_cost": 50.0,
+      "tenure_months": 24,
+      "balance": 0.0,
+      "last_payment_status": "failed",
+      "last_payment_date": "2025-11-05",
+      "ltv": 8000,
+      "current_plan": "premium",
+      "payment_history": [
+        {
+          "date": "2025-10-05",
+          "status": "success",
+          "amount": 50.0
+        },
+        {
+          "date": "2025-09-05",
+          "status": "success",
+          "amount": 50.0
+        }
+      ]
+    }
+  },
+  "plan_features": {
+    "premium": {
+      "name": "Premium Care Plan",
+      "price": 50.0,
+      "features": [
+        {
+          "name": "Unlimited Vet Visits",
+          "included": true
+        },
+        {
+          "name": "24/7 Telehealth",
+          "included": true
+        },
+        {
+          "name": "Dental Cleanings (2x/year)",
+          "included": true
+        },
+        {
+          "name": "Prescription Delivery",
+          "included": true
+        },
+        {
+          "name": "Medical Records Access",
+          "included": true
+        },
+        {
+          "name": "Priority Appointment Booking",
+          "included": true
+        },
+        {
+          "name": "Wellness Exams",
+          "included": true
+        },
+        {
+          "name": "Emergency Care Discount (50%)",
+          "included": true
+        }
+      ]
+    },
+    "bridge": {
+      "name": "Bridge Plan (Temporary)",
+      "price": 5.0,
+      "features": [
+        {
+          "name": "Unlimited Vet Visits",
+          "included": false
+        },
+        {
+          "name": "24/7 Telehealth",
+          "included": true
+        },
+        {
+          "name": "Dental Cleanings (2x/year)",
+          "included": false
+        },
+        {
+          "name": "Prescription Delivery",
+          "included": false
+        },
+        {
+          "name": "Medical Records Access",
+          "included": true
+        },
+        {
+          "name": "Priority Appointment Booking",
+          "included": true
+        },
+        {
+          "name": "Wellness Exams",
+          "included": false
+        },
+        {
+          "name": "Emergency Care Discount (50%)",
+          "included": false
+        }
+      ]
+    }
+  }
+}
