@@ -13,7 +13,6 @@ from utils.ui_components import (
     typing_indicator,
     plan_comparison_table,
     glass_box_panel,
-    metric_card,
     user_table,
     flowchart_visualization
 )
@@ -99,24 +98,24 @@ st.markdown("### 📊 Real-Time Impact Dashboard")
 col1, col2, col3, col4 = st.columns(4)
 
 with col1:
-    metric_card(
-        "💰 Revenue Saved (LTV)",
-        format_currency(st.session_state.total_revenue_saved),
-        help_text="Total future LTV preserved by AI interventions"
+    st.metric(
+        label="💰 Revenue Saved (LTV)",
+        value=format_currency(st.session_state.total_revenue_saved),
+        help="Total future LTV preserved by AI interventions"
     )
 
 with col2:
-    metric_card(
-        "🛡️ Churn Prevented",
-        str(st.session_state.churn_prevented_count),
-        help_text="Customers retained vs. standard dunning"
+    st.metric(
+        label="🛡️ Churn Prevented",
+        value=st.session_state.churn_prevented_count,
+        help="Customers retained vs. standard dunning"
     )
 
 with col3:
-    metric_card(
-        "👥 Users Processed",
-        str(st.session_state.users_processed),
-        help_text="Total payment failures handled today"
+    st.metric(
+        label="👥 Users Processed",
+        value=st.session_state.users_processed,
+        help="Total payment failures handled today"
     )
 
 with col4:
@@ -124,10 +123,10 @@ with col4:
         (st.session_state.churn_prevented_count / st.session_state.users_processed * 100)
         if st.session_state.users_processed > 0 else 0
     )
-    metric_card(
-        "📈 Retention Rate",
-        f"{retention_rate:.0f}%",
-        help_text="AI success rate vs. 40% standard dunning"
+    st.metric(
+        label="📈 Retention Rate",
+        value=f"{retention_rate:.0f}%",
+        help="AI success rate vs. 40% standard dunning"
     )
 
 st.divider()

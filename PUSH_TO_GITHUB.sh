@@ -3,7 +3,7 @@
 # Replace YOUR_GITHUB_USERNAME with your actual GitHub username
 # Run this script after creating the repo on GitHub
 
-GITHUB_USERNAME="YOUR_GITHUB_USERNAME"
+GITHUB_USERNAME="akhil-neelam-ai"
 REPO_NAME="pet-dunning-agent"
 
 echo "🚀 Pushing PetDunning to GitHub..."
