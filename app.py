@@ -54,7 +54,6 @@ st.markdown("""
         border: 1px solid #E0E0E0;
         border-radius: 12px;
         padding: 20px;
-        min-height: 500px;
         max-height: 600px;
         overflow-y: auto;
     }
@@ -63,7 +62,6 @@ st.markdown("""
         border: 1px solid #E0E0E0;
         border-radius: 12px;
         padding: 20px;
-        min-height: 500px;
         max-height: 600px;
         overflow-y: auto;
     }
@@ -181,6 +179,24 @@ with st.sidebar:
             risk_score=0.0,
             ltv=user_data['ltv'],
             tenure_months=user_data['tenure_months'],
+            # Payment history data (will be populated by router)
+            payment_history=None,
+            payment_risk_score=None,
+            payment_risk_tier=None,
+            failure_rate=None,
+            late_payment_rate=None,
+            payment_reliability=None,
+            # Medical data (will be populated by router)
+            medical_history=None,
+            medication_adherence_score=None,
+            medical_urgency_score=None,
+            medical_urgency_tier=None,
+            continuity_of_care_importance=None,
+            # Retention priority (will be populated by router)
+            retention_priority_score=None,
+            retention_decision=None,
+            should_engage_ai=None,
+            # Conversation data
             messages=[],
             current_intent=None,
             conversation_stage='initial',
@@ -301,16 +317,55 @@ if st.session_state.conversation_active:
 
             # Show current state
             st.markdown("#### Current State")
-            col1, col2 = st.columns(2)
 
+            # Row 1: Main metrics
+            col1, col2, col3 = st.columns(3)
             with col1:
                 st.metric("Conversation Stage", st.session_state.agent_state['conversation_stage'].upper())
-                st.metric("Risk Score", f"{st.session_state.agent_state['risk_score']:.2f}")
-
             with col2:
                 st.metric("Current Plan", st.session_state.agent_state['current_plan'].upper())
+            with col3:
+                if st.session_state.agent_state.get('payment_risk_score') is not None:
+                    payment_tier = st.session_state.agent_state.get('payment_risk_tier', 'N/A')
+                    st.metric("Payment Risk", f"{st.session_state.agent_state['payment_risk_score']:.1f} ({payment_tier})")
+
+            # Row 2: Additional metrics
+            col4, col5, col6 = st.columns(3)
+            with col4:
+                st.metric("Risk Score", f"{st.session_state.agent_state['risk_score']:.2f}")
+            with col5:
+                if st.session_state.agent_state.get('payment_reliability'):
+                    st.metric("Payment Reliability", st.session_state.agent_state['payment_reliability'].upper())
+            with col6:
                 if st.session_state.agent_state.get('current_intent'):
-                    st.metric("Detected Intent", st.session_state.agent_state['current_intent'])
+                    st.metric("Detected Intent", st.session_state.agent_state['current_intent'].replace('_', ' ').title())
+
+            # Row 3: Medical metrics
+            if st.session_state.agent_state.get('medical_urgency_score'):
+                col7, col8, col9 = st.columns(3)
+                with col7:
+                    st.metric("Medical Urgency", f"{st.session_state.agent_state['medical_urgency_score']:.1f}/100")
+                with col8:
+                    if st.session_state.agent_state.get('medication_adherence_score'):
+                        st.metric("Medication Adherence", f"{st.session_state.agent_state['medication_adherence_score']}%")
+                with col9:
+                    if st.session_state.agent_state.get('continuity_of_care_importance'):
+                        st.metric("Care Importance", st.session_state.agent_state['continuity_of_care_importance'])
+
+            # Row 4: Retention Priority (Autonomous AI Decision)
+            if st.session_state.agent_state.get('retention_priority_score') is not None:
+                col10, col11, col12 = st.columns(3)
+                with col10:
+                    score = st.session_state.agent_state['retention_priority_score']
+                    st.metric("🎯 Retention Priority", f"{score:.1f}/100")
+                with col11:
+                    if st.session_state.agent_state.get('retention_decision'):
+                        decision = st.session_state.agent_state['retention_decision'].replace('_', ' ').title()
+                        st.metric("AI Decision", decision)
+                with col12:
+                    if st.session_state.agent_state.get('should_engage_ai') is not None:
+                        engage = "✓ YES" if st.session_state.agent_state['should_engage_ai'] else "✗ NO"
+                        st.metric("Engage AI Agent", engage)
 
             st.divider()
 

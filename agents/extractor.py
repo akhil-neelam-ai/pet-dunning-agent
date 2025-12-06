@@ -13,12 +13,14 @@ load_dotenv()
 client = Anthropic(api_key=os.getenv('ANTHROPIC_API_KEY'))
 
 
-def extract_intent(user_message: str, conversation_context: str = "") -> ExtractorOutput:
+def extract_intent(user_message: str, conversation_context: str = "", last_assistant_message: str = "") -> ExtractorOutput:
     """
     Extract intent from user's message using Claude
 
     Supported intents:
-    - accept_bridge: User agrees to Bridge Plan
+    - accept_bridge: User agrees to Bridge Plan (explicitly or clearly)
+    - accept_extension: User chooses payment extension option
+    - ambiguous_acceptance: User says yes/ok but multiple options were offered
     - decline_bridge: User declines Bridge Plan
     - financial_hardship: User mentions money problems
     - ask_for_more_info: User wants details
@@ -28,21 +30,34 @@ def extract_intent(user_message: str, conversation_context: str = "") -> Extract
     - ask_for_time: User needs more time to pay
     """
 
+    # Check if last message offered multiple options
+    multiple_options_offered = False
+    if last_assistant_message:
+        # Look for indicators of multiple options: "or", "option", "which", "prefer", "choose"
+        option_indicators = ['which option', 'or', 'prefer', 'choose between', 'two options', 'either']
+        multiple_options_offered = any(indicator in last_assistant_message.lower() for indicator in option_indicators)
+
     prompt = f"""You are an intent classification system for a veterinary payment system.
 
 User's message: "{user_message}"
 
 Conversation context: {conversation_context if conversation_context else "Initial payment failure notification sent"}
 
+Last assistant message: "{last_assistant_message if last_assistant_message else "None"}"
+
+IMPORTANT RULE: If the last assistant message offered MULTIPLE OPTIONS (e.g., "Option A or Option B?", "Which would you prefer?")
+and the user responds with just "yes", "ok", "sure" WITHOUT specifying which option, classify as "ambiguous_acceptance".
+
 Classify the user's intent into ONE of these categories:
-1. accept_bridge - User agrees to the $5 Bridge Plan (e.g., "yes", "ok", "do the $5 plan", "sure", "that works")
-2. decline_bridge - User rejects Bridge Plan (e.g., "no thanks", "not interested", "just cancel")
-3. financial_hardship - User mentions money problems (e.g., "can't afford", "don't have money", "tight on cash", "what are my options")
-4. ask_for_more_info - User wants details (e.g., "what's included?", "tell me more", "how does it work?")
-5. dispute_charge - User questions charge (e.g., "I already paid", "this is wrong", "why am I charged?")
-6. cancel_request - User wants to cancel (e.g., "cancel my plan", "I'm done", "unsubscribe")
-7. update_payment - User offers new payment method (e.g., "I'll update my card", "use my other card")
-8. ask_for_time - User needs extension (e.g., "give me a week", "need more time", "ready to pay friday", "can pay next week")
+1. accept_bridge - User EXPLICITLY agrees to Bridge Plan (e.g., "yes to bridge plan", "do the $5 plan", "switch to bridge")
+2. accept_extension - User EXPLICITLY chooses payment extension (e.g., "yes to extension", "give me 14 days", "keep premium for now")
+3. ambiguous_acceptance - User says yes/ok/sure but multiple options were offered and they didn't specify which (IMPORTANT!)
+4. decline_bridge - User rejects Bridge Plan (e.g., "no thanks", "not interested", "just cancel")
+5. financial_hardship - User mentions money problems (e.g., "can't afford", "don't have money", "tight on cash")
+6. ask_for_more_info - User wants details (e.g., "what's included?", "tell me more")
+7. cancel_request - User wants to cancel (e.g., "cancel my plan", "I'm done")
+8. update_payment - User offers new payment method (e.g., "I'll update my card")
+9. ask_for_time - User needs extension (e.g., "give me a week", "need more time")
 
 IMPORTANT: Return ONLY valid JSON, no other text or markdown formatting.
 
@@ -83,8 +98,20 @@ IMPORTANT: Return ONLY valid JSON, no other text or markdown formatting.
 
         # Check for common patterns
         if any(word in msg_lower for word in ['yes', 'sure', 'ok', 'do it', 'sounds good', 'that works']):
-            return ExtractorOutput(intent='accept_bridge', confidence=0.7,
-                                 extracted_entities={}, reasoning='Keyword match: acceptance')
+            # Check if multiple options were offered - if so, mark as ambiguous
+            if multiple_options_offered and not any(specific in msg_lower for specific in ['bridge', 'extension', '$5', '14 day', 'premium', 'plan']):
+                return ExtractorOutput(intent='ambiguous_acceptance', confidence=0.8,
+                                     extracted_entities={}, reasoning='Ambiguous: yes/ok without specifying which option')
+            # Check for specific option mentions
+            elif 'bridge' in msg_lower or '$5' in msg_lower:
+                return ExtractorOutput(intent='accept_bridge', confidence=0.7,
+                                     extracted_entities={}, reasoning='Keyword match: accepts Bridge Plan')
+            elif 'extension' in msg_lower or 'premium' in msg_lower or '14' in msg_lower:
+                return ExtractorOutput(intent='accept_extension', confidence=0.7,
+                                     extracted_entities={}, reasoning='Keyword match: accepts extension')
+            else:
+                return ExtractorOutput(intent='accept_bridge', confidence=0.6,
+                                     extracted_entities={}, reasoning='Keyword match: generic acceptance')
         elif any(word in msg_lower for word in ['no money', "don't have", "can't afford", "tight", 'broke', 'options']):
             return ExtractorOutput(intent='financial_hardship', confidence=0.7,
                                  extracted_entities={}, reasoning='Keyword match: financial hardship')
@@ -115,17 +142,23 @@ def extractor_node(state: AgentState) -> dict:
 
     last_user_message = user_messages[-1]['content']
 
+    # Get the last assistant message (to check for multiple options)
+    assistant_messages = [m for m in messages if m['role'] == 'assistant']
+    last_assistant_message = assistant_messages[-1]['content'] if assistant_messages else ""
+
     # Build conversation context
     context = f"User: {state['user_name']}, Pet: {state['pet_name']} ({state['pet_condition']})"
     if state.get('router_decision'):
         context += f", Recommendation: {state['router_decision']}"
 
-    # Extract intent
-    extraction = extract_intent(last_user_message, context)
+    # Extract intent with last assistant message for context
+    extraction = extract_intent(last_user_message, context, last_assistant_message)
 
     # Map intent to conversation stage
     stage_map = {
         'accept_bridge': 'closing',
+        'accept_extension': 'closing',
+        'ambiguous_acceptance': 'negotiating',  # Need clarification
         'decline_bridge': 'objection_handling',
         'financial_hardship': 'negotiating',
         'ask_for_more_info': 'negotiating',

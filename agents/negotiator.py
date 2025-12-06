@@ -161,6 +161,58 @@ Tone: Accommodating, helpful, gives them choices."""
     return response.content[0].text
 
 
+def generate_clarification_request(state: AgentState) -> str:
+    """
+    Ask for clarification when user says yes/ok but multiple options were offered
+    """
+    user_name = state['user_name']
+
+    prompt = f"""The customer {user_name} just said "yes" but you had offered them TWO options:
+Option A: 14-day payment extension (stay on Premium Plan, pay full amount later)
+Option B: Bridge Plan ($5/month temporary plan with core features)
+
+Write a brief, friendly clarification request (1-2 sentences) that:
+1. Thanks them for responding
+2. Asks which specific option they'd like to choose
+3. Restates the two options clearly
+
+Tone: Friendly, not robotic, quick clarification."""
+
+    response = client.messages.create(
+        model="claude-sonnet-4-5-20250929",
+        max_tokens=200,
+        messages=[{"role": "user", "content": prompt}]
+    )
+
+    return response.content[0].text
+
+
+def generate_extension_confirmation(state: AgentState) -> str:
+    """
+    Confirm payment extension (staying on Premium Plan)
+    """
+    user_name = state['user_name']
+    pet_name = state['pet_name']
+
+    prompt = f"""The customer {user_name} chose the 14-day payment extension option to stay on their Premium Plan.
+
+Write a confirmation message (2-3 sentences) that:
+1. Confirms the 14-day extension is approved
+2. Specifies the new payment due date
+3. Reassures that {pet_name} keeps all Premium benefits active during this time
+4. Mentions they can reach out if anything changes
+
+Tone: Supportive, professional, reassuring."""
+
+    response = client.messages.create(
+        model="claude-sonnet-4-5-20250929",
+        max_tokens=200,
+        messages=[{"role": "user", "content": prompt}]
+    )
+
+    return response.content[0].text
+
+
 def negotiator_node(state: AgentState) -> dict:
     """
     Main negotiator node - generates appropriate message based on conversation stage
@@ -172,6 +224,16 @@ def negotiator_node(state: AgentState) -> dict:
     if conversation_stage == 'initial':
         message = generate_initial_outreach(state)
         strategy = 'initial_outreach_with_bridge_offer'
+
+    elif current_intent == 'ambiguous_acceptance':
+        # User said yes but didn't specify which option - need clarification
+        message = generate_clarification_request(state)
+        strategy = 'request_clarification'
+
+    elif current_intent == 'accept_extension':
+        # User explicitly chose payment extension
+        message = generate_extension_confirmation(state)
+        strategy = 'confirm_payment_extension'
 
     elif current_intent == 'financial_hardship' or current_intent == 'ask_for_more_info':
         message = generate_bridge_plan_explanation(state)

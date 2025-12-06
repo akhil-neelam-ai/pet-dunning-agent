@@ -28,6 +28,26 @@ class AgentState(TypedDict):
     ltv: float
     tenure_months: int
 
+    # Payment History (Internal Data - Compliance-Friendly)
+    payment_history: Optional[dict]  # Full payment record
+    payment_risk_score: Optional[float]  # 0-100
+    payment_risk_tier: Optional[str]  # 'LOW', 'MODERATE', 'HIGH', 'CRITICAL'
+    failure_rate: Optional[float]  # Percentage of failed payments
+    late_payment_rate: Optional[float]  # Percentage of late payments
+    payment_reliability: Optional[str]  # 'excellent', 'good', 'fair', 'poor'
+
+    # Medical Data (from ezyVet)
+    medical_history: Optional[dict]  # Full medical record
+    medication_adherence_score: Optional[int]  # 0-100
+    medical_urgency_score: Optional[float]  # 0-100
+    medical_urgency_tier: Optional[str]  # 'MAXIMUM_RETENTION', 'HIGH_RETENTION', etc.
+    continuity_of_care_importance: Optional[str]  # 'CRITICAL', 'HIGH', 'MEDIUM', 'LOW'
+
+    # Retention Priority (AI Decision)
+    retention_priority_score: Optional[float]  # 0-100 (composite score)
+    retention_decision: Optional[str]  # 'PRIORITY_OUTREACH', 'SECONDARY_OUTREACH', 'IGNORE'
+    should_engage_ai: Optional[bool]  # True if score >= 70
+
     # Conversation State
     messages: List[Message]
     current_intent: Optional[str]  # 'accept_bridge', 'financial_hardship', 'decline_cancel', etc.

@@ -187,6 +187,35 @@ def glass_box_panel(state: dict):
             if agent == 'router':
                 st.markdown(f"**Decision:** `{call.get('decision')}`")
                 st.markdown(f"**Risk Score:** `{call.get('risk_score', 0):.2f}`")
+
+                # Payment History Display
+                payment_check = call.get('payment_check', {})
+                if payment_check:
+                    st.markdown("---")
+                    st.markdown("**💳 Payment History Analysis:**")
+                    col1, col2 = st.columns(2)
+                    with col1:
+                        st.markdown(f"- **Risk Score:** `{payment_check.get('risk_score', 'N/A'):.1f}/100`")
+                        st.markdown(f"- **Risk Tier:** `{payment_check.get('risk_tier', 'N/A')}`")
+                        st.markdown(f"- **Reliability:** `{payment_check.get('reliability', 'N/A').upper()}`")
+                    with col2:
+                        st.markdown(f"- **Failure Rate:** `{payment_check.get('failure_rate', 'N/A'):.1f}%`")
+                        st.markdown(f"- **Late Rate:** `{payment_check.get('late_rate', 'N/A'):.1f}%`")
+                        st.markdown(f"- **Total Payments:** `{payment_check.get('total_payments', 'N/A')}`")
+
+                # Medical Check Display
+                medical_check = call.get('medical_check', {})
+                if medical_check:
+                    st.markdown("---")
+                    st.markdown("**🏥 Medical History Check:**")
+                    col1, col2 = st.columns(2)
+                    with col1:
+                        st.markdown(f"- **Urgency Score:** `{medical_check.get('urgency_score', 'N/A'):.1f}/100`")
+                        st.markdown(f"- **Urgency Tier:** `{medical_check.get('urgency_tier', 'N/A')}`")
+                    with col2:
+                        st.markdown(f"- **Adherence:** `{medical_check.get('adherence_score', 'N/A')}%`")
+                        st.markdown(f"- **Critical Meds:** `{medical_check.get('critical_medications', 0)}`")
+
                 st.info(call.get('reasoning', ''))
 
             # Extractor
