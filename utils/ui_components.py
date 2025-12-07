@@ -254,17 +254,28 @@ def user_table(users_data: list):
     df = pd.DataFrame(users_data)
     st.dataframe(
         df,
-        use_container_width=True,
+        width='stretch',
         hide_index=True,
+        height=250,  # Fixed height for better visibility
         column_config={
-            "Status": st.column_config.Column(
-                width="small",
+            "User": st.column_config.Column(
+                width="medium",
+            ),
+            "Pet": st.column_config.Column(
+                width="large",
             ),
             "LTV": st.column_config.NumberColumn(
                 format="$%d",
+                width="small",
+            ),
+            "Tenure": st.column_config.Column(
+                width="small",
             ),
             "Risk": st.column_config.Column(
-                width="small",
+                width="medium",
+            ),
+            "Status": st.column_config.Column(
+                width="medium",
             )
         }
     )

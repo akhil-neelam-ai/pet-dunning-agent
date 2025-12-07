@@ -1,5 +1,5 @@
 """
-PetDunning Enterprise - "The Churn Shield"
+CareLoop - Keeping Pets in Care, Revenue in Loop
 Main Streamlit Application
 """
 import streamlit as st
@@ -21,8 +21,8 @@ from utils.metrics import calculate_revenue_saved, format_currency
 # Page config
 st.set_page_config(
     layout="wide",
-    page_title="PetDunning Enterprise | The Churn Shield",
-    page_icon="🐾"
+    page_title="CareLoop | AI-Powered Revenue Retention",
+    page_icon="🔄"
 )
 
 # Custom CSS
@@ -65,6 +65,28 @@ st.markdown("""
         max-height: 600px;
         overflow-y: auto;
     }
+    /* Make metrics text smaller to fit better */
+    [data-testid="stMetricValue"] {
+        font-size: 20px !important;
+    }
+    [data-testid="stMetricLabel"] {
+        font-size: 12px !important;
+    }
+    /* Make dataframe text larger for better readability */
+    [data-testid="stDataFrame"] {
+        font-size: 16px !important;
+    }
+    [data-testid="stDataFrame"] table {
+        font-size: 16px !important;
+    }
+    [data-testid="stDataFrame"] th {
+        font-size: 17px !important;
+        font-weight: 700 !important;
+    }
+    /* Make chat input larger */
+    [data-testid="stChatInput"] textarea {
+        font-size: 16px !important;
+    }
 </style>
 """, unsafe_allow_html=True)
 
@@ -88,8 +110,8 @@ def load_data():
 data = load_data()
 
 # Header
-st.markdown('<div class="main-header">🐾 PetDunning Enterprise</div>', unsafe_allow_html=True)
-st.markdown('<div class="subtitle">AI-Powered Financial Triage for Veterinary Health Networks</div>', unsafe_allow_html=True)
+st.markdown('<div class="main-header">🔄 CareLoop</div>', unsafe_allow_html=True)
+st.markdown('<div class="subtitle">Keeping Pets in Care, Revenue in Loop | AI-Powered Retention for Veterinary Networks</div>', unsafe_allow_html=True)
 
 # CFO Dashboard - Top Metrics
 st.markdown("### 📊 Real-Time Impact Dashboard")
@@ -383,10 +405,6 @@ else:
     # Welcome screen
     st.info("👈 Select a customer and click 'Simulate Payment Failure' to start the demo")
 
-    # Show workflow diagram
-    st.markdown("### 🔄 How PetDunning Works")
-    flowchart_visualization()
-
 # Footer
 st.divider()
-st.caption("Built with ❤️ using Claude Sonnet 4.5, LangGraph, and Streamlit | Demo for Mars Veterinary Health")
+st.caption("Built with ❤️ using Claude Sonnet 4.5, LangGraph, and Streamlit | CareLoop - Demo for Mars Veterinary Health")
