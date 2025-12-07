@@ -153,6 +153,8 @@ st.divider()
 
 # Multi-User Table
 st.markdown("### 📋 At-Risk Customers")
+
+# Build users list
 users_list = []
 for user_id, user_data in data['users'].items():
     users_list.append({
@@ -164,7 +166,9 @@ for user_id, user_data in data['users'].items():
         'Status': user_data['current_plan'].upper()
     })
 
-user_table(users_list)
+# Display table with container for better spacing
+with st.container():
+    user_table(users_list)
 
 st.divider()
 
@@ -375,19 +379,21 @@ if st.session_state.conversation_active:
                         st.metric("Care Importance", st.session_state.agent_state['continuity_of_care_importance'])
 
             # Row 4: Retention Priority (Autonomous AI Decision)
+            # Note: We engage with ALL customers, but offer type varies by retention priority
             if st.session_state.agent_state.get('retention_priority_score') is not None:
                 col10, col11, col12 = st.columns(3)
                 with col10:
                     score = st.session_state.agent_state['retention_priority_score']
-                    st.metric("🎯 Retention Priority", f"{score:.1f}/100")
+                    st.metric("🎯 Retention Priority", f"{score:.1f}/100",
+                             help="AI score determining offer type - all customers get tailored outreach")
                 with col11:
                     if st.session_state.agent_state.get('retention_decision'):
                         decision = st.session_state.agent_state['retention_decision'].replace('_', ' ').title()
-                        st.metric("AI Decision", decision)
+                        st.metric("Outreach Strategy", decision,
+                                 help="Offer type based on medical urgency + payment risk profile")
                 with col12:
-                    if st.session_state.agent_state.get('should_engage_ai') is not None:
-                        engage = "✓ YES" if st.session_state.agent_state['should_engage_ai'] else "✗ NO"
-                        st.metric("Engage AI Agent", engage)
+                    # Empty column for alignment consistency
+                    pass
 
             st.divider()
 

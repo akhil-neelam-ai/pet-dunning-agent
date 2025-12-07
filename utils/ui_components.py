@@ -256,20 +256,20 @@ def user_table(users_data: list):
         df,
         width='stretch',
         hide_index=True,
-        height=250,  # Fixed height for better visibility
+        height=300,  # Increased height for better visibility
         column_config={
             "User": st.column_config.Column(
-                width="medium",
+                width="large",
             ),
             "Pet": st.column_config.Column(
                 width="large",
             ),
             "LTV": st.column_config.NumberColumn(
                 format="$%d",
-                width="small",
+                width="medium",
             ),
             "Tenure": st.column_config.Column(
-                width="small",
+                width="medium",
             ),
             "Risk": st.column_config.Column(
                 width="medium",
