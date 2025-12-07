@@ -1,30 +1,44 @@
 #!/bin/bash
+# Secure GitHub Push Script with Conflict Resolution
 
-# Replace YOUR_GITHUB_USERNAME with your actual GitHub username
-# Run this script after creating the repo on GitHub
-
-GITHUB_USERNAME="akhil-neelam-ai"
-REPO_NAME="pet-dunning-agent"
-
-echo "🚀 Pushing PetDunning to GitHub..."
+echo "🚀 GitHub Push Script"
+echo "====================="
 echo ""
 
-# Add remote
-git remote add origin https://github.com/$GITHUB_USERNAME/$REPO_NAME.git
+# Prompt for GitHub token securely
+echo "Enter your GitHub Personal Access Token:"
+read -s GITHUB_TOKEN
+echo ""
 
-# Push to main branch
-git push -u origin main
+if [ -z "$GITHUB_TOKEN" ]; then
+    echo "❌ Error: No token provided"
+    exit 1
+fi
+
+echo "📥 Step 1: Pulling latest changes from remote..."
+git pull https://$GITHUB_TOKEN@github.com/Cokeyzha/pet-dunning-agent.git main --allow-unrelated-histories --no-rebase
+
+if [ $? -ne 0 ]; then
+    echo "⚠️  Merge conflicts detected. You'll need to resolve them manually."
+    echo "Run: git status"
+    echo "Then: git add . && git commit -m 'Merge remote changes'"
+    unset GITHUB_TOKEN
+    exit 1
+fi
 
 echo ""
-echo "✅ Done! Your code is now on GitHub"
-echo "📍 Repository: https://github.com/$GITHUB_USERNAME/$REPO_NAME"
-echo ""
-echo "🔐 Security Check:"
-echo "  ✅ .env file is excluded (API key safe)"
-echo "  ✅ venv/ folder is excluded"
-echo ""
-echo "📨 To share with your colleague:"
-echo "  1. Go to https://github.com/$GITHUB_USERNAME/$REPO_NAME/settings/access"
-echo "  2. Click 'Invite a collaborator'"
-echo "  3. Add your colleague's GitHub username"
-echo ""
+echo "📤 Step 2: Pushing your changes to GitHub..."
+git push https://$GITHUB_TOKEN@github.com/Cokeyzha/pet-dunning-agent.git main
+
+if [ $? -eq 0 ]; then
+    echo ""
+    echo "✅ Success! Your changes have been pushed to GitHub."
+    echo "🔗 View at: https://github.com/Cokeyzha/pet-dunning-agent"
+else
+    echo ""
+    echo "❌ Push failed. Check the error messages above."
+    exit 1
+fi
+
+# Clear token from memory
+unset GITHUB_TOKEN
