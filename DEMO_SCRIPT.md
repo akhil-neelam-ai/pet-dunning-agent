@@ -63,7 +63,7 @@
 - Point to the email that appears:
   - Mentions Bella by name
   - Acknowledges diabetes
-  - Offers $5/month Bridge Plan (vs $50 Premium)
+  - Offers $4.99/month Digital Keeper Plan (vs $50 Premium)
   - No shame, pure empathy
 
 **[Type customer response as Maria]**
@@ -81,7 +81,7 @@
 
 - AI offers **two options**:
   1. 14-day extension (stay on Premium)
-  2. Bridge Plan ($5/mo)
+  2. Digital Keeper Plan ($4.99/mo)
 
 **[Type: "Can I have the 14 days please?"]**
 
