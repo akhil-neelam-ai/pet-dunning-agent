@@ -118,51 +118,36 @@ def plan_comparison_table():
     <table class="plan-table">
         <thead>
             <tr>
-                <th>Feature</th>
-                <th>Premium Plan ($50/mo)</th>
-                <th>Bridge Plan ($5/mo)</th>
+                <th>Service</th>
+                <th>$19.99 Access Plan (Current)</th>
+                <th>$4.99 Digital Keeper Plan</th>
             </tr>
         </thead>
         <tbody>
             <tr>
-                <td>Unlimited Vet Visits</td>
+                <td>Unlimited Exams</td>
                 <td class="included">✓ Included</td>
-                <td class="not-included">✗ Not Included</td>
+                <td class="not-included">✗ Excluded</td>
             </tr>
             <tr>
-                <td>24/7 Telehealth</td>
-                <td class="included">✓ Included</td>
-                <td class="included">✓ Included</td>
-            </tr>
-            <tr>
-                <td>Dental Cleanings (2x/year)</td>
-                <td class="included">✓ Included</td>
-                <td class="not-included">✗ Not Included</td>
-            </tr>
-            <tr>
-                <td>Prescription Delivery</td>
-                <td class="included">✓ Included</td>
-                <td class="not-included">✗ Not Included</td>
-            </tr>
-            <tr>
-                <td>Medical Records Access</td>
+                <td>24/7 Live Chat</td>
                 <td class="included">✓ Included</td>
                 <td class="included">✓ Included</td>
             </tr>
             <tr>
-                <td>Priority Appointment Booking</td>
+                <td>Microchip & Membership</td>
                 <td class="included">✓ Included</td>
                 <td class="included">✓ Included</td>
             </tr>
             <tr>
-                <td>Wellness Exams</td>
+                <td>Exclusive Member Benefits</td>
                 <td class="included">✓ Included</td>
-                <td class="not-included">✗ Not Included</td>
+                <td class="included">✓ Included</td>
             </tr>
             <tr>
-                <td>Emergency Care Discount (50%)</td>
+                <td>Medical Records Retention</td>
                 <td class="included">✓ Included</td>
-                <td class="not-included">✗ Not Included</td>
+                <td class="included">✓ Included</td>
             </tr>
         </tbody>
     </table>

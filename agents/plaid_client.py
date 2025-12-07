@@ -160,7 +160,7 @@ def assess_payment_capacity(credit_data: dict, payment_amount: float = 50.00) ->
         and credit_tier in ['excellent', 'good']
     )
 
-    can_afford_bridge = available_balance >= 5.00  # Bridge Plan is $5/mo
+    can_afford_bridge = available_balance >= 4.99  # Digital Keeper Plan is $4.99/mo
 
     # Risk assessment
     if can_afford_premium:

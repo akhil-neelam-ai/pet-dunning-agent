@@ -108,7 +108,7 @@ def router_node(state: AgentState) -> dict:
             f"🏥 HIGH MEDICAL URGENCY ({medical_urgency_score:.1f}/100) + 💳 GOOD PAYMENT HISTORY ({payment_reliability})\n"
             f"{state['pet_name']} has {pet_condition} - {med_context}\n"
             f"Customer: {tenure}-month tenure, ${ltv:,.0f} LTV, {medication_adherence_score}% adherence\n"
-            f"→ OFFER: Bridge Plan ($5/mo) OR 30-day payment extension + payment plan options"
+            f"→ OFFER: Digital Keeper Plan ($4.99/mo) OR 30-day payment extension + payment plan options"
         )
 
     elif medical_urgency_score < 50 and payment_risk_score <= 30:
@@ -131,7 +131,7 @@ def router_node(state: AgentState) -> dict:
             f"🚨 CRITICAL MEDICAL NEED ({medical_urgency_score:.1f}/100)\n"
             f"{state['pet_name']} has {pet_condition} ({continuity_of_care} importance) - {med_context}\n"
             f"Payment history: {payment_reliability} ({failure_rate:.0f}% failure, {late_payment_rate:.0f}% late)\n"
-            f"→ OFFER: Bridge Plan ($5/mo) to maintain critical medical care"
+            f"→ OFFER: Digital Keeper Plan ($4.99/mo) to maintain critical medical care access"
         )
 
     elif payment_risk_score <= 40:

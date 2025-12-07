@@ -34,7 +34,7 @@ Your goal:
 Write a brief, empathetic email (3-4 sentences) that:
 1. Acknowledges the payment issue gently (no shame/blame)
 2. Emphasizes we understand {pet_name}'s medical needs are critical
-3. Introduces a solution: our $5/month "Bridge Plan" that keeps medical records active and telehealth access during financial hardship
+3. Introduces a solution: our $4.99/month "Digital Keeper Plan" that keeps medical records active and 24/7 live chat access during financial hardship
 4. Asks if they'd like to learn more
 
 Tone: Warm, human, supportive (not corporate). Mention the pet's name and condition to show you care.
@@ -58,11 +58,11 @@ def generate_bridge_plan_explanation(state: AgentState) -> str:
 
     prompt = f"""You are explaining the "Bridge Plan" to a customer who's interested but needs details.
 
-Bridge Plan Details:
-- Cost: $5/month (vs $50/month Premium)
-- Includes: Medical records access, 24/7 telehealth, priority appointment booking
-- Paused: In-person unlimited visits, prescription delivery, dental cleanings
-- Duration: Flexible - upgrade back to Premium anytime
+Digital Keeper Plan Details:
+- Cost: $4.99/month (vs $19.99/month Access Plan)
+- Includes: 24/7 Live Chat, Microchip & Membership, Exclusive Member Benefits, Medical Records Retention
+- Excluded: Unlimited Exams (in-person visits)
+- Duration: Flexible - upgrade back to Access Plan anytime
 
 Write a clear, reassuring explanation (3-4 sentences) that:
 1. Lists what {pet_name} KEEPS (telehealth, records)
@@ -120,7 +120,7 @@ def generate_success_confirmation(state: AgentState) -> str:
     prompt = f"""The customer just accepted the Bridge Plan for {pet_name}.
 
 Write a warm confirmation message (2-3 sentences) that:
-1. Confirms Bridge Plan is now active at $5/month
+1. Confirms Digital Keeper Plan is now active at $4.99/month
 2. Reassures that {pet_name}'s medical records and telehealth are available 24/7
 3. Reminds them they can upgrade back to Premium anytime
 
@@ -169,7 +169,7 @@ def generate_clarification_request(state: AgentState) -> str:
 
     prompt = f"""The customer {user_name} just said "yes" but you had offered them TWO options:
 Option A: 14-day payment extension (stay on Premium Plan, pay full amount later)
-Option B: Bridge Plan ($5/month temporary plan with core features)
+Option B: Digital Keeper Plan ($4.99/month plan with 24/7 chat, medical records, and member benefits)
 
 Write a brief, friendly clarification request (1-2 sentences) that:
 1. Thanks them for responding

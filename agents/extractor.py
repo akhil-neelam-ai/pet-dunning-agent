@@ -49,7 +49,7 @@ IMPORTANT RULE: If the last assistant message offered MULTIPLE OPTIONS (e.g., "O
 and the user responds with just "yes", "ok", "sure" WITHOUT specifying which option, classify as "ambiguous_acceptance".
 
 Classify the user's intent into ONE of these categories:
-1. accept_bridge - User EXPLICITLY agrees to Bridge Plan (e.g., "yes to bridge plan", "do the $5 plan", "switch to bridge")
+1. accept_bridge - User EXPLICITLY agrees to Digital Keeper Plan (e.g., "yes to keeper plan", "do the $4.99 plan", "switch to keeper")
 2. accept_extension - User EXPLICITLY chooses payment extension (e.g., "yes to extension", "give me 14 days", "keep premium for now")
 3. ambiguous_acceptance - User says yes/ok/sure but multiple options were offered and they didn't specify which (IMPORTANT!)
 4. decline_bridge - User rejects Bridge Plan (e.g., "no thanks", "not interested", "just cancel")
@@ -99,11 +99,11 @@ IMPORTANT: Return ONLY valid JSON, no other text or markdown formatting.
         # Check for common patterns
         if any(word in msg_lower for word in ['yes', 'sure', 'ok', 'do it', 'sounds good', 'that works']):
             # Check if multiple options were offered - if so, mark as ambiguous
-            if multiple_options_offered and not any(specific in msg_lower for specific in ['bridge', 'extension', '$5', '14 day', 'premium', 'plan']):
+            if multiple_options_offered and not any(specific in msg_lower for specific in ['bridge', 'keeper', 'extension', '$4.99', '$5', '14 day', 'premium', 'plan']):
                 return ExtractorOutput(intent='ambiguous_acceptance', confidence=0.8,
                                      extracted_entities={}, reasoning='Ambiguous: yes/ok without specifying which option')
             # Check for specific option mentions
-            elif 'bridge' in msg_lower or '$5' in msg_lower:
+            elif 'keeper' in msg_lower or '$4.99' in msg_lower or '$5' in msg_lower:
                 return ExtractorOutput(intent='accept_bridge', confidence=0.7,
                                      extracted_entities={}, reasoning='Keyword match: accepts Bridge Plan')
             elif 'extension' in msg_lower or 'premium' in msg_lower or '14' in msg_lower:
